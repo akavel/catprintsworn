@@ -11,13 +11,6 @@ function reload(path)
     lastModified = os.time()
 end
 
--- push = require 'push'
--- winw, winh = love.window.getDesktopDimensions()
--- push:setupScreen(384, 384, winw, winh, {fullscreen=false, resizable=true, pixelperfect=true})
--- function love.resize(w, h)
---     return push:resize(w, h)
--- end
-
 readfile = function(path)
     local f = assert(io.open(path))
     local text = f:read('a')
@@ -28,17 +21,23 @@ end
 json = require 'json'
 assets = json.decode(readfile('assets.json'))
 
-
 font = love.graphics.newFont( 'mago1.ttf', 15, 'mono' )
+-- font = love.graphics.newFont( 'mago3.ttf', 15, 'mono' )
 font:setFilter('nearest')
+
+unmd = function(md)
+    return md:gsub('%[([^%]]+)%]%([^%)]+%)', '%1')
+        :gsub('’', "'")
+end
 
 function love.update(dt)
     reload('main.lua')
 end
 
-function wrap(x0, y0, font, text)
+function wrap(x0, y0, font, text, hAdjust)
+    local hAdjust = hAdjust or 0
     local words = {}
-    for w in text:gmatch('[^ ]+') do
+    for w in text:gmatch('[^ \n]+') do
         words[#words+1] = w
     end
     local i = 1
@@ -56,8 +55,9 @@ function wrap(x0, y0, font, text)
         until i > #words
         local t = table.concat(line, ' ')
         love.graphics.print(t, font, x0, y0)
-        y0 = y0 + font:getHeight()
+        y0 = y0 + font:getHeight() + hAdjust
     end
+    return y0
 end
 
 
@@ -71,13 +71,13 @@ function love.draw()
         love.graphics.line(385,0, 385, 50)
         love.graphics.setColor(old)
 
-        love.graphics.print("Hello Mateusz: " .. assets[1].Assets[1].Abilities[1].Text, font, 0, 0)
-        -- love.graphics.print(assets[1].Assets[1].Abilities[1].Text, font, 0, 0)
-        -- love.graphics.print("Your armed, multipurpose starship", font, 0, 0)
-        wrap(0, 10, font, assets[1].Assets[1].Abilities[1].Text)
-        -- wrap(0, 0, font, "Hello Mateusz")
         -- love.graphics.print("Hello Mateusz: " .. assets[1].Assets[1].Abilities[1].Text, font, 0, 0)
-        -- love.graphics.print(assets[0].Name, font, 0, 10)
+        local i, j = 2, 1
+        if #assets<i or #assets[i].Assets<j then return end
+        local y = 10
+        y = wrap(0, y, font, unmd(assets[i].Assets[j].Abilities[1].Text))
+        y = wrap(0, y, font, unmd(assets[i].Assets[j].Abilities[2].Text))
+        y = wrap(0, y, font, unmd(assets[i].Assets[j].Abilities[3].Text))
 
     end)
     c:setFilter('nearest', 'nearest')
