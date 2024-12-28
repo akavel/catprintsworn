@@ -21,8 +21,11 @@ end
 json = require 'json'
 assets = json.decode(readfile('assets.json'))
 
-font = love.graphics.newFont( 'mago1.ttf', 15, 'mono' )
+-- font = love.graphics.newFont( 'mago1.ttf', 15, 'mono' )
 -- font = love.graphics.newFont( 'mago3.ttf', 15, 'mono' )
+-- font = love.graphics.newFont( 'PetitePx.ttf', 15, 'mono' )
+-- font = love.graphics.newFont( 'clover-sans.ttf', 12, 'mono' )
+font = love.graphics.newFont( 'Lief.ttf', 14, 'mono' )
 font:setFilter('nearest')
 
 unmd = function(md)
