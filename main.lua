@@ -40,13 +40,20 @@ end
 function wrap(x0, y0, font, text, hAdjust)
     local hAdjust = hAdjust or 0
     local words = {}
-    for w in text:gmatch('[^ \n]+') do
+    local text = text:gsub("\n\n+", "\n")
+        :gsub("([^ ])\n", "%1 \n")
+        :gsub("\n([^ ])", "\n %1")
+    for w in text:gmatch('[^ ]+') do
         words[#words+1] = w
     end
     local i = 1
     while i <= #words do
         local line = {}
         repeat
+            if words[i] == '\n' then
+                i = i+1
+                if #line > 0 then break end
+            end
             line[#line+1] = words[i]
             i = i+1
             local w = font:getWidth(table.concat(line, ' '))
