@@ -33,10 +33,6 @@ unmd = function(md)
         :gsub('’', "'")
 end
 
-function love.update(dt)
-    reload('main.lua')
-end
-
 function wrap(x0, y0, font, text, hAdjust)
     local hAdjust = hAdjust or 0
     local words = {}
@@ -71,34 +67,28 @@ function wrap(x0, y0, font, text, hAdjust)
 end
 
 
-function love.draw()
-    -- push:start()
+local canvas = love.graphics.newCanvas()
+function love.update(dt)
+    reload('main.lua')
 
-    local c = love.graphics.newCanvas()
-    c:renderTo(function()
-        local old = {love.graphics.getColor()}
-        love.graphics.setColor(1,0,0)
-        love.graphics.line(385,0, 385, 50)
-        love.graphics.setColor(old)
+    canvas:renderTo(function()
+        love.graphics.clear(1,1,1)
 
-        -- love.graphics.print("Hello Mateusz: " .. assets[1].Assets[1].Abilities[1].Text, font, 0, 0)
+        love.graphics.setColor(0,0,0)
+
         local i, j = 2, 1
         if #assets<i or #assets[i].Assets<j then return end
         local y = 10
         y = wrap(0, y, font, unmd(assets[i].Assets[j].Abilities[1].Text))
         y = wrap(0, y, font, unmd(assets[i].Assets[j].Abilities[2].Text))
         y = wrap(0, y, font, unmd(assets[i].Assets[j].Abilities[3].Text))
-
     end)
-    c:setFilter('nearest', 'nearest')
-    -- love.graphics.scale(2,2)
+end
+
+function love.draw()
+    love.graphics.setColor(1, 1, 1);
+    canvas:setFilter('nearest', 'nearest')
     love.graphics.setDefaultFilter('nearest', 'nearest')
-
-    love.graphics.print("Hello World 3!", 400, 300)
-    -- love.graphics.draw(c)
     local scale = 2
-    love.graphics.draw(c, 0, 0, 0, scale, scale)
-
-
-    -- push:finish()
+    love.graphics.draw(canvas, 0, 0, 0, scale, scale);
 end
