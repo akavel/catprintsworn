@@ -22,10 +22,11 @@ json = require 'json'
 assets = json.decode(readfile('assets.json'))
 
 -- font = love.graphics.newFont( 'mago1.ttf', 15, 'mono' )
+font = love.graphics.newFont( 'mago1.ttf', 32, 'mono' )
 -- font = love.graphics.newFont( 'mago3.ttf', 15, 'mono' )
 -- font = love.graphics.newFont( 'PetitePx.ttf', 15, 'mono' )
 -- font = love.graphics.newFont( 'clover-sans.ttf', 12, 'mono' )
-font = love.graphics.newFont( 'Lief.ttf', 14, 'mono' )
+-- font = love.graphics.newFont( 'Lief.ttf', 14, 'mono' )
 font:setFilter('nearest')
 
 unmd = function(md)
@@ -68,21 +69,29 @@ end
 
 
 local canvas = love.graphics.newCanvas()
-function love.update(dt)
-    reload('main.lua')
 
+function prep()
+    local i, j = 2, 1
+    local y = 10
     canvas:renderTo(function()
         love.graphics.clear(1,1,1)
 
         love.graphics.setColor(0,0,0)
 
-        local i, j = 2, 1
         if #assets<i or #assets[i].Assets<j then return end
-        local y = 10
         y = wrap(0, y, font, unmd(assets[i].Assets[j].Abilities[1].Text))
         y = wrap(0, y, font, unmd(assets[i].Assets[j].Abilities[2].Text))
         y = wrap(0, y, font, unmd(assets[i].Assets[j].Abilities[3].Text))
     end)
+    local dat = canvas:newImageData(1, 1, 0, 0, 384, y)
+    dat:encode('png', ('asset-%d-%d.png'):format(i,j))
+end
+
+prep()
+
+function love.update(dt)
+    reload('main.lua')
+
 end
 
 function love.draw()
