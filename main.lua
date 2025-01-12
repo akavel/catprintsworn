@@ -97,7 +97,11 @@ function wrap(x0, y0, font, text, hAdjust)
                 if #line > 0 then break end
             elseif words[i] == '*' and #line == 0 then -- itemized list / bullet point
                 i = i+1
-                local bullet = ' • '
+                -- local bullet = ' • '
+                -- local bullet = ' ▸ '
+                -- local bullet = '   ▸ '
+                local bullet = '   ▹ '
+                -- local bullet = '  - '
                 local x1 = printdx(bullet, font, x0, y0)
                 local itemtext = {}
                 -- while i<=#words and words[i] ~= '\n' do
@@ -136,7 +140,7 @@ local canvas = love.graphics.newCanvas()
 
 function prep()
     -- local i, j = 4, 36
-    local i, j = 1,1
+    local i, j = 4,20
     local y = 1
     canvas:renderTo(function()
         love.graphics.clear(1,1,1)
