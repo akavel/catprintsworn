@@ -153,13 +153,17 @@ function prep()
         y = 10+ wrap(0, y, font, unmd(asset.Abilities[3].Text), hAdjust)
         if asset['Condition Meter'] then
             local meter = asset['Condition Meter']
+            local x = 0
             if meter.Min and meter.Max then
-                local x = 0
                 for m = meter.Max, meter.Min, -1 do
                     x = printdx(('┏ %s ┓'):format(m), font, x, y)
                 end
-                -- printdx('/', font, x, y)
             end
+            x = printdx(' ', font, x, y)
+            for _, cond in ipairs(meter.Conditions or {}) do
+                x = printdx(('╭ %s ╮'):format(cond:sub(1,4)), ifont, x, y)
+            end
+            y = y + font:getHeight() + hAdjust
         end
     end)
     local dat = canvas:newImageData(1, 1, 0, 0, 384, y)
