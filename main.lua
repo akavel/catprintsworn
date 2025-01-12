@@ -155,9 +155,17 @@ function prep()
         if asset.Requirement then
             y = 10+ wrap(0, y, ifont, unmd(asset.Requirement), hAdjust)
         end
-        y = 10+ wrap(0, y, font, unmd(asset.Abilities[1].Text), hAdjust)
-        y = 10+ wrap(0, y, font, unmd(asset.Abilities[2].Text), hAdjust)
-        y = 10+ wrap(0, y, font, unmd(asset.Abilities[3].Text), hAdjust)
+
+        local function ability(i)
+            local ab = asset.Abilities[i]
+            -- local prefix = ab.Enabled and '■ ' or '□ '
+            local prefix = ab.Enabled and '● ' or '○ '
+            y = 10+ wrap(0, y, font, prefix..unmd(ab.Text), hAdjust)
+        end
+        for i in ipairs(asset.Abilities) do
+            ability(i)
+        end
+
         if asset['Condition Meter'] then
             local meter = asset['Condition Meter']
             local x = 0
