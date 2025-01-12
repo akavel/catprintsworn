@@ -86,6 +86,22 @@ function wrap(x0, y0, font, text, hAdjust)
             if words[i] == '\n' then
                 i = i+1
                 if #line > 0 then break end
+            elseif words[i] == '*' and #line == 0 then -- itemized list / bullet point
+                i = i+1
+                local bullet = ' • '
+                local indent = font:getWidth(bullet)
+                love.graphics.print(bullet, font, x0, y0)
+                local itemtext = {}
+                -- while i<=#words and words[i] ~= '\n' do
+                while i<=#words do
+                    local s = words[i]
+                    itemtext[#itemtext+1] = s
+                    i = i+1
+                    if s == '\n' then break end
+                end
+                itemtext = table.concat(itemtext, ' ')
+                y0 = wrap(x0+indent, y0, font, itemtext, hAdjust)
+                goto next_line
             end
             line[#line+1] = words[i]
             i = i+1
@@ -100,9 +116,9 @@ function wrap(x0, y0, font, text, hAdjust)
                 break
             end
         until i > #words
-        local t = table.concat(line, ' ')
-        love.graphics.print(t, font, x0, y0)
+        love.graphics.print(table.concat(line, ' '), font, x0, y0)
         y0 = y0 + font:getHeight() + hAdjust
+        ::next_line::
     end
     return y0
 end
@@ -112,7 +128,7 @@ local canvas = love.graphics.newCanvas()
 
 function prep()
     -- local i, j = 4, 36
-    local i, j = 4, 39
+    local i, j = 2, 1
     local y = 1
     canvas:renderTo(function()
         love.graphics.clear(1,1,1)
