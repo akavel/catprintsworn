@@ -5,7 +5,8 @@ _catprintsworn_ is a
 project which generates
 images of
 _[Ironsworn: Starforged](https://shawn-tomkin.itch.io/ironsworn-starforged)_
-solo RPG Assets,
+solo RPG 
+[Assets](https://github.com/rsek/dataforged),
 for printing on
 a cheap thermal "cat printer".
 To avoid the risk of Chinese spyware from the printer's mobile app,
