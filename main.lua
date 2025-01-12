@@ -89,8 +89,9 @@ function wrap(x0, y0, font, text, hAdjust)
     end
     local i = 1
     local split_word = nil
-    while i <= #words do
+    while i <= #words or split_word ~= nil do
         local line = {split_word}
+        split_word = nil
         repeat
             if words[i] == '\n' then
                 i = i+1
@@ -140,7 +141,7 @@ local canvas = love.graphics.newCanvas()
 
 function prep()
     -- local i, j = 4, 36
-    local i, j = 4,20
+    local i, j = 4,24
     local y = 1
     canvas:renderTo(function()
         love.graphics.clear(1,1,1)
