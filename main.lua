@@ -70,6 +70,12 @@ function try_hyph(line, i, words, font, x0)
     return nil
 end
 
+-- printdx prints a text and returns x plus width of printed text in given font
+local function printdx(text, font, x, y)
+    love.graphics.print(text, font, x, y)
+    return x + font:getWidth(text) 
+end
+
 function wrap(x0, y0, font, text, hAdjust)
     local hAdjust = hAdjust or 0
     local words = {}
@@ -90,8 +96,7 @@ function wrap(x0, y0, font, text, hAdjust)
             elseif words[i] == '*' and #line == 0 then -- itemized list / bullet point
                 i = i+1
                 local bullet = ' • '
-                local indent = font:getWidth(bullet)
-                love.graphics.print(bullet, font, x0, y0)
+                local x1 = printdx(bullet, font, x0, y0)
                 local itemtext = {}
                 -- while i<=#words and words[i] ~= '\n' do
                 while i<=#words do
@@ -101,7 +106,7 @@ function wrap(x0, y0, font, text, hAdjust)
                     if s == '\n' then break end
                 end
                 itemtext = table.concat(itemtext, ' ')
-                y0 = wrap(x0+indent, y0, font, itemtext, hAdjust)
+                y0 = wrap(x1, y0, font, itemtext, hAdjust)
                 goto next_line
             end
             line[#line+1] = words[i]
@@ -129,7 +134,7 @@ local canvas = love.graphics.newCanvas()
 
 function prep()
     -- local i, j = 4, 36
-    local i, j = 4, 9
+    local i, j = 1, 1
     local y = 1
     canvas:renderTo(function()
         love.graphics.clear(1,1,1)
@@ -145,7 +150,17 @@ function prep()
         end
         y = 10+ wrap(0, y, font, unmd(asset.Abilities[1].Text), hAdjust)
         y = 10+ wrap(0, y, font, unmd(asset.Abilities[2].Text), hAdjust)
-        y = wrap(0, y, font, unmd(asset.Abilities[3].Text), hAdjust)
+        y = 10+ wrap(0, y, font, unmd(asset.Abilities[3].Text), hAdjust)
+        if asset['Condition Meter'] then
+            local meter = asset['Condition Meter']
+            if meter.Min and meter.Max then
+                local x = 0
+                for m = meter.Max, meter.Min, -1 do
+                    x = printdx(('┏ %s ┓'):format(m), font, x, y)
+                end
+                -- printdx('/', font, x, y)
+            end
+        end
     end)
     local dat = canvas:newImageData(1, 1, 0, 0, 384, y)
     dat:encode('png', ('asset-%d-%d.png'):format(i,j))
