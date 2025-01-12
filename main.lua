@@ -61,7 +61,12 @@ function try_hyph(line, i, words, font, x0)
     -- end
     local line0 = table.concat(line, ' ') .. ' '
     local strs = hyphenate(words[i], lang)
-    for j = #strs-1, 1, -1 do
+    local start = #strs-1
+    if i==#words or words[i+1] == '\n' then
+        -- if final word of paragraph, make sure we don't split it on last syllable.
+        start = start-1
+    end
+    for j = start, 1, -1 do
         local prefix = table.concat(strs, '', 1, j) .. '-'
         local w = font:getWidth(line0 .. prefix)
         if w <= 384-x0 then
