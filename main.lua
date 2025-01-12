@@ -19,33 +19,12 @@ readfile = function(path)
 end
 
 json = require 'json'
-assets = json.decode(readfile('assets.json'))
+assets = json.decode(readfile('dat-starforged/assets.json'))
 
--- font = love.graphics.newFont( 'georgiab.ttf', 20, 'mono' ) hAdjust = 0
--- font = love.graphics.newFont( 'DejaVuSerifCondensed-Bold.ttf', 18, 'mono' ) hAdjust = 0
-font = love.graphics.newFont( 'DejaVuSerif-Bold.ttf', 18, 'mono' ) hAdjust = 0
-ifont = love.graphics.newFont( 'DejaVuSerif-BoldItalic.ttf', 18, 'mono' )
--- sfont = love.graphics.newFont( 'DejaVuSerifCondensed-BoldItalic.ttf', 18, 'mono' )
-sfont = love.graphics.newFont( 'NotoSerif-CondensedBoldItalic.ttf', 18, 'mono' )
--- font = love.graphics.newFont( 'NotoSans-CondensedBold.ttf', 20, 'mono' ) hAdjust = 0
--- font = love.graphics.newFont( 'mago1.ttf', 15, 'mono' )
--- font = love.graphics.newFont( 'mago1.ttf', 32, 'mono' )
--- font = love.graphics.newFont( 'mago3.ttf', 15, 'mono' )
--- font = love.graphics.newFont( 'PetitePx.ttf', 15, 'mono' )
--- font = love.graphics.newFont( 'PetitePx.ttf', 31, 'mono' ) hAdjust = -6
--- font = love.graphics.newFont( 'clover-sans.ttf', 12, 'mono' )
--- font = love.graphics.newFont( 'Lief.ttf', 14, 'mono' )
--- font:setFilter('nearest')
-tfont = font
-
--- hfont = love.graphics.newFont( 'georgiab.ttf', 30, 'mono' )
--- hfont = love.graphics.newFont( 'RussoOne-Regular.ttf', 30, 'mono' )
--- hfont = love.graphics.newFont( 'RussoOne-Regular.ttf', 32, 'mono' )
--- hfont = love.graphics.newFont( 'NotoSans-Regular.ttf', 32, 'mono' )
-hfont = love.graphics.newFont( 'NotoSans-Regular.ttf', 33, 'mono' )
--- hfont = love.graphics.newFont( 'NotoSans-Bold.ttf', 30, 'mono' )
--- hfont = love.graphics.newFont( 'NotoSans-Condensed.ttf', 32, 'mono' )
--- hfont = love.graphics.newFont( 'NotoSerif-Light.ttf', 30, 'mono' )
+font = love.graphics.newFont( 'fonts-djvu/DejaVuSerif-Bold.ttf', 18, 'mono' ) hAdjust = 0
+ifont = love.graphics.newFont( 'fonts-djvu/DejaVuSerif-BoldItalic.ttf', 18, 'mono' )
+sfont = love.graphics.newFont( 'fonts-noto/NotoSerif-CondensedBoldItalic.ttf', 18, 'mono' )
+hfont = love.graphics.newFont( 'fonts-noto/NotoSans-Regular.ttf', 33, 'mono' )
 
 require 'hyphenate'
 
@@ -54,7 +33,7 @@ unmd = function(md)
         :gsub('’', "'")
 end
 
-local lang = load_patterns(readfile'hyph-en-us.pat.txt', 2, 3)
+local lang = load_patterns(readfile'dat-hyphenation/hyph-en-us.pat.txt', 2, 3)
 function try_hyph(line, i, words, font, x0)
     -- if true then
     --     return nil
@@ -146,7 +125,7 @@ local canvas = love.graphics.newCanvas()
 
 function prep()
     -- local i, j = 4, 36
-    local i, j = 4,24
+    local i, j = 1,1
     local y = 1
     canvas:renderTo(function()
         love.graphics.clear(1,1,1)

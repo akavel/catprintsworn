@@ -84,9 +84,9 @@ local function readfile(fname)
   return d
 end
 
-if arg then
+if not (...) then
   print 'hello!'
-  local lang = load_patterns(readfile'hyph-en-us.pat.txt', 2, 3)
+  local lang = load_patterns(readfile'dat-hyphenation/hyph-en-us.pat.txt', 2, 3)
   -- for _, i in ipairs(lang.str_breaks.septemb) do print('_', i) end
   -- for s, v in pairs(lang.str_breaks) do
   --   print(s, #v)
