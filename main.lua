@@ -34,9 +34,28 @@ tfont = font
 
 hfont = love.graphics.newFont( 'georgiab.ttf', 30, 'mono' )
 
+require 'hyphenate'
+
 unmd = function(md)
     return md:gsub('%[([^%]]+)%]%([^%)]+%)', '%1')
         :gsub('’', "'")
+end
+
+local lang = load_patterns(readfile'hyph-en-us.pat.txt', 2, 3)
+function try_hyph(line, i, words, font, x0)
+    -- if true then
+    --     return nil
+    -- end
+    local strs = hyphenate(words[i], lang)
+    for j = #strs-1, 1, -1 do
+        local prefix = table.concat(strs, '', 1, j) .. '-'
+        local w = font:getWidth(table.concat(line, ' '))
+        if w <= 384-x0 then
+            line[#line+1] = prefix
+            return table.concat(strs, '', j+1)
+        end
+    end
+    return nil
 end
 
 function wrap(x0, y0, font, text, hAdjust)
@@ -49,8 +68,9 @@ function wrap(x0, y0, font, text, hAdjust)
         words[#words+1] = w
     end
     local i = 1
+    local split_word = nil
     while i <= #words do
-        local line = {}
+        local line = {split_word}
         repeat
             if words[i] == '\n' then
                 i = i+1
@@ -62,6 +82,10 @@ function wrap(x0, y0, font, text, hAdjust)
             if w > 384-x0 then
                 i = i-1
                 line[#line] = nil
+                split_word = try_hyph(line, i, words, font, x0)
+                if split_word then
+                    i = i+1
+                end
                 break
             end
         until i > #words

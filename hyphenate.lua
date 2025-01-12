@@ -47,6 +47,7 @@ end
 
 -- hyphenate splits the word based on loaded patterns
 function hyphenate(word, patterns)
+  local word, suffix = assert(word:match'^(%w+)(.*)$')
   local rword = ('.'..word..'.'):lower()
   local breaks = {}
   for i = 1, #rword-1 do
@@ -72,6 +73,7 @@ function hyphenate(word, patterns)
     strs[#strs+1] = word:sub(prev, offs[i])
     prev = offs[i]+1
   end
+  strs[#strs] = strs[#strs] .. suffix
   return strs
 end
 
@@ -96,7 +98,10 @@ if arg then
   -- end
   local tests = {
     'developers',
+    'developer',
+    'developer,',
     'September',
+    'discovery,',
   }
   for _, t in ipairs(tests) do
     print(table.concat(hyphenate(t, lang), '-'))
