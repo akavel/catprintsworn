@@ -21,7 +21,10 @@ end
 json = require 'json'
 assets = json.decode(readfile('assets.json'))
 
-font = love.graphics.newFont( 'georgiab.ttf', 20, 'mono' ) hAdjust = 0
+-- font = love.graphics.newFont( 'georgiab.ttf', 20, 'mono' ) hAdjust = 0
+-- font = love.graphics.newFont( 'DejaVuSerifCondensed-Bold.ttf', 18, 'mono' ) hAdjust = 0
+font = love.graphics.newFont( 'DejaVuSerif-Bold.ttf', 18, 'mono' ) hAdjust = 0
+-- font = love.graphics.newFont( 'NotoSans-CondensedBold.ttf', 20, 'mono' ) hAdjust = 0
 -- font = love.graphics.newFont( 'mago1.ttf', 15, 'mono' )
 -- font = love.graphics.newFont( 'mago1.ttf', 32, 'mono' )
 -- font = love.graphics.newFont( 'mago3.ttf', 15, 'mono' )
@@ -32,7 +35,10 @@ font = love.graphics.newFont( 'georgiab.ttf', 20, 'mono' ) hAdjust = 0
 -- font:setFilter('nearest')
 tfont = font
 
-hfont = love.graphics.newFont( 'georgiab.ttf', 30, 'mono' )
+-- hfont = love.graphics.newFont( 'georgiab.ttf', 30, 'mono' )
+-- hfont = love.graphics.newFont( 'RussoOne-Regular.ttf', 30, 'mono' )
+-- hfont = love.graphics.newFont( 'RussoOne-Regular.ttf', 32, 'mono' )
+hfont = love.graphics.newFont( 'NotoSans-Regular.ttf', 32, 'mono' )
 
 require 'hyphenate'
 
@@ -46,10 +52,11 @@ function try_hyph(line, i, words, font, x0)
     -- if true then
     --     return nil
     -- end
+    local line0 = table.concat(line, ' ') .. ' '
     local strs = hyphenate(words[i], lang)
     for j = #strs-1, 1, -1 do
         local prefix = table.concat(strs, '', 1, j) .. '-'
-        local w = font:getWidth(table.concat(line, ' '))
+        local w = font:getWidth(line0 .. prefix)
         if w <= 384-x0 then
             line[#line+1] = prefix
             return table.concat(strs, '', j+1)
@@ -101,7 +108,7 @@ local canvas = love.graphics.newCanvas()
 
 function prep()
     -- local i, j = 4, 36
-    local i, j = 4, 34
+    local i, j = 4, 36
     local y = 1
     canvas:renderTo(function()
         love.graphics.clear(1,1,1)
@@ -110,6 +117,7 @@ function prep()
 
         if #assets<i or #assets[i].Assets<j then return end
         y = 10+ wrap(0, y, hfont, unmd(assets[i].Assets[j].Name), 0)
+        -- y = 10+ wrap(0, y, hfont, unmd(assets[i].Assets[j].Name:upper()), 0)
         y = 10+ wrap(0, y, font, unmd(assets[i].Assets[j].Abilities[1].Text), hAdjust)
         y = 10+ wrap(0, y, font, unmd(assets[i].Assets[j].Abilities[2].Text), hAdjust)
         y = wrap(0, y, font, unmd(assets[i].Assets[j].Abilities[3].Text), hAdjust)

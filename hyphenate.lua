@@ -102,6 +102,9 @@ if arg then
     'developer,',
     'September',
     'discovery,',
+    'Descriptor/Focus.',
+    'Action/Theme',
+    'Descriptor',
   }
   for _, t in ipairs(tests) do
     print(table.concat(hyphenate(t, lang), '-'))
