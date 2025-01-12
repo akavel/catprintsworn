@@ -21,13 +21,18 @@ end
 json = require 'json'
 assets = json.decode(readfile('assets.json'))
 
+font = love.graphics.newFont( 'georgiab.ttf', 20, 'mono' ) hAdjust = 0
 -- font = love.graphics.newFont( 'mago1.ttf', 15, 'mono' )
-font = love.graphics.newFont( 'mago1.ttf', 32, 'mono' )
+-- font = love.graphics.newFont( 'mago1.ttf', 32, 'mono' )
 -- font = love.graphics.newFont( 'mago3.ttf', 15, 'mono' )
 -- font = love.graphics.newFont( 'PetitePx.ttf', 15, 'mono' )
+-- font = love.graphics.newFont( 'PetitePx.ttf', 31, 'mono' ) hAdjust = -6
 -- font = love.graphics.newFont( 'clover-sans.ttf', 12, 'mono' )
 -- font = love.graphics.newFont( 'Lief.ttf', 14, 'mono' )
-font:setFilter('nearest')
+-- font:setFilter('nearest')
+tfont = font
+
+hfont = love.graphics.newFont( 'georgiab.ttf', 30, 'mono' )
 
 unmd = function(md)
     return md:gsub('%[([^%]]+)%]%([^%)]+%)', '%1')
@@ -71,17 +76,19 @@ end
 local canvas = love.graphics.newCanvas()
 
 function prep()
-    local i, j = 2, 1
-    local y = 10
+    -- local i, j = 4, 36
+    local i, j = 4, 34
+    local y = 1
     canvas:renderTo(function()
         love.graphics.clear(1,1,1)
 
         love.graphics.setColor(0,0,0)
 
         if #assets<i or #assets[i].Assets<j then return end
-        y = wrap(0, y, font, unmd(assets[i].Assets[j].Abilities[1].Text))
-        y = wrap(0, y, font, unmd(assets[i].Assets[j].Abilities[2].Text))
-        y = wrap(0, y, font, unmd(assets[i].Assets[j].Abilities[3].Text))
+        y = 10+ wrap(0, y, hfont, unmd(assets[i].Assets[j].Name), 0)
+        y = 10+ wrap(0, y, font, unmd(assets[i].Assets[j].Abilities[1].Text), hAdjust)
+        y = 10+ wrap(0, y, font, unmd(assets[i].Assets[j].Abilities[2].Text), hAdjust)
+        y = wrap(0, y, font, unmd(assets[i].Assets[j].Abilities[3].Text), hAdjust)
     end)
     local dat = canvas:newImageData(1, 1, 0, 0, 384, y)
     dat:encode('png', ('asset-%d-%d.png'):format(i,j))
@@ -96,8 +103,9 @@ end
 
 function love.draw()
     love.graphics.setColor(1, 1, 1);
-    canvas:setFilter('nearest', 'nearest')
-    love.graphics.setDefaultFilter('nearest', 'nearest')
-    local scale = 2
+    -- canvas:setFilter('nearest', 'nearest')
+    -- love.graphics.setDefaultFilter('nearest', 'nearest')
+    -- local scale = 2
+    local scale = 1
     love.graphics.draw(canvas, 0, 0, 0, scale, scale);
 end
