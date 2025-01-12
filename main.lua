@@ -38,7 +38,11 @@ tfont = font
 -- hfont = love.graphics.newFont( 'georgiab.ttf', 30, 'mono' )
 -- hfont = love.graphics.newFont( 'RussoOne-Regular.ttf', 30, 'mono' )
 -- hfont = love.graphics.newFont( 'RussoOne-Regular.ttf', 32, 'mono' )
-hfont = love.graphics.newFont( 'NotoSans-Regular.ttf', 32, 'mono' )
+-- hfont = love.graphics.newFont( 'NotoSans-Regular.ttf', 32, 'mono' )
+hfont = love.graphics.newFont( 'NotoSans-Regular.ttf', 33, 'mono' )
+-- hfont = love.graphics.newFont( 'NotoSans-Bold.ttf', 30, 'mono' )
+-- hfont = love.graphics.newFont( 'NotoSans-Condensed.ttf', 32, 'mono' )
+-- hfont = love.graphics.newFont( 'NotoSerif-Light.ttf', 30, 'mono' )
 
 require 'hyphenate'
 
@@ -108,7 +112,7 @@ local canvas = love.graphics.newCanvas()
 
 function prep()
     -- local i, j = 4, 36
-    local i, j = 4, 36
+    local i, j = 4, 39
     local y = 1
     canvas:renderTo(function()
         love.graphics.clear(1,1,1)
