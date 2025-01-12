@@ -24,6 +24,7 @@ assets = json.decode(readfile('assets.json'))
 -- font = love.graphics.newFont( 'georgiab.ttf', 20, 'mono' ) hAdjust = 0
 -- font = love.graphics.newFont( 'DejaVuSerifCondensed-Bold.ttf', 18, 'mono' ) hAdjust = 0
 font = love.graphics.newFont( 'DejaVuSerif-Bold.ttf', 18, 'mono' ) hAdjust = 0
+ifont = love.graphics.newFont( 'DejaVuSerif-BoldItalic.ttf', 18, 'mono' )
 -- font = love.graphics.newFont( 'NotoSans-CondensedBold.ttf', 20, 'mono' ) hAdjust = 0
 -- font = love.graphics.newFont( 'mago1.ttf', 15, 'mono' )
 -- font = love.graphics.newFont( 'mago1.ttf', 32, 'mono' )
@@ -128,7 +129,7 @@ local canvas = love.graphics.newCanvas()
 
 function prep()
     -- local i, j = 4, 36
-    local i, j = 2, 1
+    local i, j = 4, 9
     local y = 1
     canvas:renderTo(function()
         love.graphics.clear(1,1,1)
@@ -136,11 +137,15 @@ function prep()
         love.graphics.setColor(0,0,0)
 
         if #assets<i or #assets[i].Assets<j then return end
-        y = 10+ wrap(0, y, hfont, unmd(assets[i].Assets[j].Name), 0)
+        local asset = assets[i].Assets[j]
+        y = 10+ wrap(0, y, hfont, unmd(asset.Name), -2)
         -- y = 10+ wrap(0, y, hfont, unmd(assets[i].Assets[j].Name:upper()), 0)
-        y = 10+ wrap(0, y, font, unmd(assets[i].Assets[j].Abilities[1].Text), hAdjust)
-        y = 10+ wrap(0, y, font, unmd(assets[i].Assets[j].Abilities[2].Text), hAdjust)
-        y = wrap(0, y, font, unmd(assets[i].Assets[j].Abilities[3].Text), hAdjust)
+        if asset.Requirement then
+            y = 10+ wrap(0, y, ifont, unmd(asset.Requirement), hAdjust)
+        end
+        y = 10+ wrap(0, y, font, unmd(asset.Abilities[1].Text), hAdjust)
+        y = 10+ wrap(0, y, font, unmd(asset.Abilities[2].Text), hAdjust)
+        y = wrap(0, y, font, unmd(asset.Abilities[3].Text), hAdjust)
     end)
     local dat = canvas:newImageData(1, 1, 0, 0, 384, y)
     dat:encode('png', ('asset-%d-%d.png'):format(i,j))
