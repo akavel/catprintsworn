@@ -47,7 +47,7 @@ end
 
 -- hyphenate splits the word based on loaded patterns
 function hyphenate(word, patterns)
-  local word, suffix = assert(word:match'^(%w+)(.*)$')
+  local word, suffix = assert(word:match'^(%w*)(.*)$')
   local rword = ('.'..word..'.'):lower()
   local breaks = {}
   for i = 1, #rword-1 do
